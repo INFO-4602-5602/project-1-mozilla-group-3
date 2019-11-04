@@ -1,82 +1,29 @@
-# 4602-Mozilla
-*Due November 4, 2019 @ 11:59pm through GitHub Classroom*
+# Group 3 README.md file
+Trevor Buck, Clark Mousaw, Hannah Weber
 
-Projects may be submitted up to 3 days late, with a 10% penalty per day
+## Team Roles:
+The three of us in the group each created a visualization for the project. We did three visualizations so we each would have something to work on and so the work would be easily divided. We met twice outside of class to work on this project. 
 
-<h2>Overview: </h2>
-Mozilla (the same company that created the Firefox web browser) recently conducted a survey on people's perceptions of privacy in our modern, highly connected world. The survey was aimed at understanding how comfortable people from all over the world are with various technology and how that comfort varies with things like device ownership or tech savvy. You can learn more about their data here: https://blog.mozilla.org/blog/2017/11/01/10-fascinating-things-we-learned-when-we-asked-the-world-how-connected-are-you/?utm_source=newsletter-mofo&utm_medium=email&utm_campaign=IOTsurveyresults&utm_content=callout&utm_term=4434975
+## How to Run the Project:
+We have three different HTML files to run the three visualizations. We will provide individual descriptions of our visualizations as well as information for how to run each file below.
+    * feelings_knownterms_vis.html (Hannah)
+    * [ADD FILE NAME] (Clark)
+    * [ADD FILE NAME] (Trevor)
 
-The challenge is that, while they have a rich set of data, they don't have strong ways of exploring that data beyond basic spreadsheets and descriptive statistics. Your goal is to create a set of visualizations that allows them to engage with their data. The raw data is available at: https://drive.google.com/file/d/0B5UMbl9u1_wQc2l0ZTU0dTdoYnM/view
+## feelings_knownterms_vis.html (Hannah)
+* This visualization compares the feelings that people expressed concerning an Internet-connected future (question 3) and how much they know about some basic internet terms (question 9). By visualizing this information we were curious if there was a correlation between people who are excited for the future and if they were more or less knowledgeable about some of its terms.
+* Task abstraction of the visualization: This visualization allows the viewer to discover a trend between people’s feelings of a connected future and how knowledgeable people are of certain basic Internet terms. The tooltip provides a way to annotate the data so the viewer can hover over the bar and see the raw data. The design of the bar chart provides a clear way to look at the trends in the data.
+* Before visualizing this data I did some basic data analysis in a Jupyter Notebook (feelings_knownterms_preprocessing.ipynb) to preprocess the data and get it into a format that would be easier to use with D3, given my limited experience with Javascript. This preprocessing stage involved 6 steps:
+    1. Create a smaller dataframe that included only the answers to questions 3 and 9 which I planned on visualizing. 
+    2. Remove all rows that didn’t have a response to question 3 and/or 9 because I wouldn’t be able to do a comparison with those responses.
+    3. Remove all of the rows of data that answered that they didn’t know any of the internet terms in question 9 because I wanted them to know at least one of them.
+    4. Create two new columns: one that counts the number of null values in the question 9 answer columns, and one that converts that number to the number of terms that they knew.
+    5. Run a groupby/aggregation function on question 3 and the number of terms the person knew.
+    6. Convert this groupby/aggregation function dataframe into a csv file that can be easily visualized in D3. 
+* Once the data was in a usable format I worked with it in D3. I used the code we worked on in class with the Shakespeare data and the D3 Worksheet, in addition to the code I wrote for the week 6 and 7 assignments. Since the data for question 3 is categorical, a bar chart was a good way to represent the data visually. The x-axis has the answer categories to question 3, and the y-axis has the aggregated average to how many terms were checked off for question 9. I choose to depict an aggregated average compared to each instance individually because I felt that a simple visual could better communicate the comparison. 
+* How to run the file: The mozilla_df_infovis.csv file is in the repository so the feelings_knownterms_vis.html file should be able to run on its own.
 
-To do this, create visualizations that illustrate at least two insights into their data. The above blog post has some insights you can use to start thinking about this dataset, but I encourage you to think outside of these ideas as well. 
+## [ADD FILE NAME] (Clark)
 
-<h2>Minimum Requirements:</h2> 
-Your project must:
-<ul>
-<li> Include a README.md file that outlines:
-  <ul>
-  <li>Information about your visualizations and what they show. Include information about interactions, preprocesses, and design as appropriate. Note what tasks the visualization allows you to accomplish to derive this insight and how your design is tailored to support these tasks. </li>
-  <li>Your design process (e.g., how did you go about designing, building, and refining your system? Why did you choose these representations?)</li>
-  <li>Your team roles for each individual</li>
-  <li>How to run your project</li></ul></li>
-<li>Include at least two unique visualizations:
-  <ul>
-  <li>One visualization must include some quantitative data</li>
-  <li>One visualization must include categorical data</li>
-  <li>Each visualization must be interactive</li>
-  <li>Your visualizations should support at least one meaningful comparison between related data attributes</li>
-  <li>Your visualizations should visualize at least five data attributes total</li></ul></li>
-<li>Be able to work with any dataset of this format (e.g., the numbers are interchangable but the columns and document titles are fixed).</li>
-</ul>
 
-<h2>Above and Beyond:</h2> 
-The above requirements are the minimum for a passing grade on this project. Some ideas to improve your project include:<ul>
-<li>Unusual Representations: Draw on some of the examples from class to represent data in ways beyond a typical scatterplot or bar chart.</li>
-<li>Style: Keep the style consistent across all your views, with an eye towards intelligently applying visual design.</li>
-<li>Geography: Incorporate maps or other geospatial data components into your visualization.</li>
-<li>Interesting Tasks: Derive insight into the data beyond that provided in Mozilla's current post. Highlight these insights in your readme and describe how the visualization enables them.</li>
-<li>Perceptually-Informed Design: Integrate perceptual concepts into your visualization design and discuss how you've integrated those concepts in your readme.</li>
-<li>Coordinated Views: Have two or more visualizations that interact with one another as you move through the data.</li></ul>
-
-<h2>Platforms:</h2> 
-You can use any development platform you'd like so long as your final project runs in the browser without having to install anything new. Your project readme should include step-by-step instructions on how to run your projects and it should run without me having to modify the code. You are welcome to use different platforms for each visualization.
-
-Some platforms to look at include:
-<ul>
-<li>D3</li>
-<li>R with ggplot</li>
-<li>WebGL or Three.js</li>
-<li>ProcessingJS</li>
-<li>Google Maps API</li>
-<li>Open Street Map API</li>
-<li>Bokeh</li>
-</ul>
-
-If you would like to use a platform that will push you in creative ways but may not support all of the requirements of the project, please come talk to me. 
-
-<h2>Submissions:</h2>
-All submissions must be made through GitHub with a timestamp by 11:59pm on 11.4. Your submission files should include:
-<ul>
-<li>Your README</li>
-<li>Your code and/or project</li>
-</ul>
-Note that each group only needs to submit one file. 
-
-## Project Teams
-Group 1:	Savannah Bornstein, Joshua Paup, Elise Bergmann, Conner Sinjem
-
-Group 2:	Lanea Blackburn, Priya Panati, Edgar Mendoza, Jacob Boeckenstedt
-
-Group 3:	Hannah Weber, Trevor Buck, Clark Mousaw	
-
-Group 4:	Madeline Cupchak, Hunter Rief, Kathleen Anderson, Yizhen Wu
-
-Group 5:	Jiaheng Zhao, Jiahao Wang, Juliet McFarlane, Michael Rogers
-
-Group 6:	Mary Yoder, Julia Merten, Paige Stockebrand, Lu Liu
-
-Group 7:	Jihoon Jang, Caden Bradbury, Talia Colalancia	
-
-Group 8:	Joshua Barker, Angus MacDonald, Malik Tefridj, Keaton Whitehead
-
-Group 9:	Anthony Camacci, Dilon Clark, Steven Yatko	
+## [ADD FILE NAME] (Trevor)

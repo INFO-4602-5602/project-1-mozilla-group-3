@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<!--Source: http://bl.ocks.org/d3noob/8952219 & http://bl.ocks.org/phoebebright/3061203 & http://www.d3noob.org/2013/01/adding-title-to-your-d3js-graph.html & My Week 7 Assignment-->
+
+<meta charset="utf-8">
+
+<head>
+	<style>
+
+	.axis {
+	  font: 10px sans-serif;
+	}
+
+	.axis path,
+	.axis line {
+	  fill: none;
+	  stroke: #000;
+	  shape-rendering: crispEdges;
+	}
+
+    .tooltip {
+    position: absolute;
+    font-size: 12px;
+    width: auto;
+    height: auto;
+    pointer-events: none;
+    background-color: white;
+    }
+
+	</style>
+</head>
+
+<body>
+<title>Group 3 Visualization</title>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+
+<script>
+    
+var margin = {top: 60, right: 20, bottom: 120, left: 80},
+    width = 600 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
+    
+var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+var y = d3.scale.linear().range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom")
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .ticks(10);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", 
+          "translate(" + margin.left + "," + margin.top + ")");
+
+d3.csv("mozilla_df_infovis.csv", function(error, data) {
+  if (error) throw error;
+    
+  // Loop through the data and convert the numeric columns to numbers
+    data.forEach(function(d) {
+        
+    // We can treat data as an object with brackets
+    d["Question 9: # of Terms Checked"] = +d["Question 9: # of Terms Checked"];
+
+    console.log(d);
+    })
+    
+    var x_val = "Thinking about a future in which so much of your world is connected to the internet leaves you feeling:";
+    var y_val = "Question 9: # of Terms Checked";
+    
+    x.domain(data.map(function(d) { return d[x_val]; }));
+    y.domain([0, d3.max(data, function(d) { return d[y_val]; })]).nice();
+    
+  // Specify the tooltip divisions
+  var tooltip = d3.select("body").append("div")
+                    .attr("class", "tooltip")
+                    .style("opacity", 0);
+    
+    svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+    .selectAll("text")
+      .style("text-anchor", "end")
+        .style("font-size", "12px") 
+      .attr("dx", "-.8em")
+      .attr("dy", "-.55em")
+      .attr("transform", "rotate(-45)" );
+    
+    svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end");
+    
+    svg.selectAll("bar")
+      .data(data)
+    .enter().append("rect")
+      .style("fill", "steelblue")
+      .attr("x", function(d) { return x(d[x_val]); })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { return y(d[y_val]); })
+      .attr("height", function(d) { return height - y(d[y_val]); })
+        .on("mouseover", function(d) {
+            var ttText = "Feeling About Future:" + ": " + d[x_val] + "<br>";
+                ttText += "Average # of Terms Checked" + ": " + d[y_val] + "<br>";
+            tooltip.html(ttText)
+                .style("left", (d3.event.pageX + 15) + "px")
+                .style("top", (d3.event.pageY - 28) + "px")
+                .transition()
+                    .duration(200)
+                    .style("opacity", .9)
+        })
+        .on("mouseout", function(d){
+          tooltip.transition()
+            .duration(550)
+            .style("opacity", 0)
+        })
+    
+    svg.append("text")
+        .attr("text-anchor", "middle")
+        .attr("transform", "translate("+ (-50) +","+(height/2)+")rotate(-90)")
+        .text("Average # of Terms Known");
+    
+    svg.append("text")
+        .attr("text-anchor", "middle")
+        .attr("transform", "translate("+ (width/2) +","+(height-(-100))+")")
+        .text("Feelings about a future in which so much of your world is connected to the internet");
+
+   svg.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", 0 - (margin.top - 15))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .style("text-decoration", "underline")
+        .text("Feelings Towards an Internet-Connected Future vs Average Knowledge of Common Internet Features");
+});
+
+</script>
+
+</body>
