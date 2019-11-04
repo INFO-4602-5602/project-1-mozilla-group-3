@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font: 11px serif;
+}
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.dot {
+  stroke: #001;
+}
+.tooltip {
+            position: absolute;
+            font-size: 12px;
+            width:  auto;
+            height: auto;
+            pointer-events: none;
+            background-color: grey;
+        }
+</style>
+<body>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+var margin = {top: 20, right: 50, bottom: 30, left: 40};
+var width = 1500 - margin.right - margin.left;
+var height = 800 - margin.top - margin.bottom;
+var x = d3.scaleBand()
+          .range([0, width]);
+var y = d3.scaleLinear()
+          .range([height, 0]);
+var color = d3.scaleOrdinal(d3.schemeCategory20b);
+var xAxis = d3.axisBottom(x);
+var yAxis = d3.axisLeft(y);
+var svg = d3.select("body").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+              .attr("transform", "translate("+margin.left + "," + margin.top + ")");
+d3.csv("20171013111831-SurveyExport.csv", function(error, data) {
+  if (error) throw error;
+  data.forEach(function(d){
+    console.log(d);
+    })
+  var x_val = "Country";
+  var y_val = "Score";
+  var country_val = "Number";
+  var answer = "I consider myself:";
+  var color_val = "Country";
+  var newData = d3.nest()
+      .key(function(d) { return d[color_val]; })
+      .rollup(function(v) { return {
+        "Country": v[0][color_val],
+        "Score": (
+            d3.sum(v, function(d) {
+            if (d[answer][0] == 'L') {
+              if (d[answer][1] == '.') {
+
+                return 1
+              } else {
+
+                return 5
+              }
+            } else if (d[answer][0] == 'A') {
+
+              return 2
+            } else if (d[answer][0] == 'T') {
+
+              return 3
+            } else if (d[answer][0] == 'U') {
+
+              return 4
+            } else return 2
+        })
+          ),
+        "Number": d3.sum(v, function(d) { return 1; }),
+
+      }})
+      .entries(data);
+  var groupedData = newData.filter(function(d){ return d.value["Number"] > 750 });
+  console.log(groupedData);
+  x.domain(d3.values(groupedData).map(function(d) { return d.value[x_val];}));
+  y.domain(d3.extent(groupedData, function(d){ return d.value[y_val]/d.value[country_val];})).nice();
+  color.domain(d3.extent(groupedData, function(d) { return d.value[color_val];}));
+  svg.append("g")
+     .attr("class", "x axis")
+     .attr("transform", "translate(0," + height + ")")
+     .call(xAxis)
+     .append("text")
+        .attr("class", "label")
+        .attr("x", width)
+        .attr("y",-6)
+        .style("text-anchor", "end")
+        .text(x_val);
+  svg.append("g")
+     .attr("class", "y axis")
+     .call(yAxis)
+     .append("text")
+        .attr("class", "label")
+        .attr("transform", "rotate(-90)")
+        .attr("y",6)
+        .style("text-anchor", "end")
+        .text(y_val);
+  var tooltip = d3.select("body").append("div")
+                    .attr("class", "tooltip")
+                    .style("opacity", 0);
+  svg.selectAll(".dot")
+     .data(groupedData)
+     .enter().append("rect")
+        .attr("class","dot")
+        .attr("width", x.bandwidth())
+        .attr("height", function(d){return height - y(d.value[y_val]/d.value[country_val])})
+        .attr("x", function(d){
+          return x(d.value[x_val]);
+        })
+        .attr("y", function(d){
+          return y(d.value[y_val]/d.value[country_val]);
+        })
+        .style("fill", function(d) {
+          return color(d.value[color_val]);
+        })
+
+});
+</script>
