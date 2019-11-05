@@ -129,7 +129,7 @@ d3.csv("20171013111831-SurveyExport.csv", function(error, data) {
       }})
       .entries(data);
 
-  var groupedData = newData.filter(function(d){ return d.value["Number"] > 1000 });
+  var groupedData = newData.filter(function(d){ return d.value["Number"] > 500 });
 
 
   // Double check that we've got the right data
@@ -164,6 +164,16 @@ d3.csv("20171013111831-SurveyExport.csv", function(error, data) {
         .style("text-anchor", "end")
         .text(y_val);
 
+  // Title
+  svg.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", 5)
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .style("text-decoration", "underline")  
+        .text("Level of Concern by Country");
+
+
   // Specify the tooltip divisions
   var tooltip = d3.select("body").append("div")
                     .attr("class", "tooltip")
@@ -186,8 +196,10 @@ d3.csv("20171013111831-SurveyExport.csv", function(error, data) {
           return color(d.value[color_val]);
         })
         .on("mouseover", function(d) {
+          d3.select(this).style("fill", "black");
           var ttText = x_val + ": " + d.value[x_val] + "<br>";
           ttText += "Average Score: " + (d.value[y_val]/d.value[country_val]) + "<br>";
+          ttText += "Number of Surverys Taken: " + (d.value[country_val]) + "<br>";
           tooltip.html(ttText)
               .style("left", (d3.event.pageX + 15) + "px")
               .style("top", (d3.event.pageY - 28) + "px")
@@ -196,30 +208,34 @@ d3.csv("20171013111831-SurveyExport.csv", function(error, data) {
               .style("opacity", .9) // started as 0!
         })
         .on("mouseout", function(d){
+          d3.select(this).attr("r", 10).style("fill", function(d) {
+            return color(d.value[color_val]);
+          });
           tooltip.transition()
                   .duration(300)
                   .style("opacity", 0)
         })
 
-        var legend = svg.selectAll(".legend")
-                        .data(color.domain())
-                        .enter().append("g")
-                        .attr("class", "legend")
-                        .attr("transform", function(d, i){
-                          return "translate(0," + (i * 20) + ")"
-                        });
-        legend.append("rect")
-              .attr("x", width - 18)
-              .attr("width", 18)
-              .attr("height", 18)
-              .style("fill", color);
+        // var legend = svg.selectAll(".legend")
+        //                 .data(color.domain())
+        //                 .enter().append("g")
+        //                 .attr("class", "legend")
+        //                 .attr("transform", function(d, i){
+        //                   return "translate(0," + (i * 20) + ")"
+        //                 });
+        // legend.append("rect")
+        //       .attr("x", width - 18)
+        //       .attr("width", 18)
+        //       .attr("height", 18)
+        //       .style("fill", color);
 
-        legend.append("text")
-              .attr("x", width - 24)
-              .attr("y", 9)
-              .attr("dy", ".35em")
-              .style("text-anchor", "end")
-              .text(function(d){return d;})
+        // legend.append("text")
+        //       .attr("x", width - 24)
+        //       .attr("y", 9)
+        //       .attr("dy", ".35em")
+        //       .style("text-anchor", "end")
+        //       .text(function(d){return d;})
+
 
 });
 
