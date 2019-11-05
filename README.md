@@ -30,6 +30,12 @@ We have three different HTML files to run the three visualizations. We will prov
 
 * Question 1 of the Mozilla survey asked users if they consider themselves Ultra Nerds, Technically Savvy, Average Users, or Luddites in regards to their knowledge of technology. The visualization that displays this data was created in d3. I assigned numeric values to each response with Ultra Nerd being the highest at 4, and Luddite being the lowest at 1. Respondents that answered in the beta before this question was asked or that had unexpected data values in the spreadsheet were given scores of 2 (Average User). The number of responses for each country required to be included in the visualization was 750 responses.
 
+* How to run: 1. Download Technical_knowledge_by_Country.html
+              2. Ensure '20171013111831-SurveyExport.csv' is located in same directory as above html code
+              3. Run http server in root 
+              4. Access file directory in browser
+              5. Run viz in browser
+
 
 ## FeelingsbyCountry (Trevor)
 * This visualization compares the feelings that people expressed concerning an Internet-connected future (question 3) and which country they are from.  This comparison would give us insight about the priorities and concerns of each individual country.  We thought it might be interesting to find out which demographics are more troubled with the takeover of the internet.
